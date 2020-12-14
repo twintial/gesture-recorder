@@ -256,7 +256,7 @@ class RecordUI(QWidget):
 
         return os.path.join(path2, f'{self.filename.text()}.wav')
 
-    # 按键录制 ese
+    # 按键录制 esc
     def keyPressEvent(self, e):
         if e.key() == Qt.Key_Escape:
             if self._running:
