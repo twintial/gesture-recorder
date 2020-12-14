@@ -3,6 +3,10 @@ from sinsound import cos_wave
 signal_types = ['cos 18kHz', 'cos 20kHz']
 
 
+def get_all_types():
+    return signal_types
+
+
 def get_signal_by_type(type):
     t = 60
     if type == 'cos 18kHz':

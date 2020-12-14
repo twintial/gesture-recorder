@@ -2,3 +2,6 @@
 __pycache__
 0
 *.wav
+build
+dist
+*.spec

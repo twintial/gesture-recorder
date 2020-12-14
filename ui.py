@@ -4,11 +4,10 @@ from PyQt5.QtCore import pyqtSignal, Qt
 from PyQt5.QtWidgets import QWidget, QLabel, QComboBox, QApplication, QPushButton, QVBoxLayout, QHBoxLayout, QLineEdit, \
     QLCDNumber, QFileDialog, QDesktopWidget
 from deviceinfoV2 import *
-from signal import *
+from signalgenerator import *
 import os
 import re
 import recordtool
-
 
 # class RecordThread(QThread):  # 步骤1.创建一个线程实例
 #     def __init__(self):
@@ -90,7 +89,7 @@ class RecordUI(QWidget):
         self.time.setDigitCount(5)
         self.time.setMode(QLCDNumber.Dec)
         self.time.setSegmentStyle(QLCDNumber.Flat)
-        self.time.display("00:00")
+        self.time.display("00.00")
 
         self.record_thread = recordtool.Record(self.time)
 
@@ -164,7 +163,7 @@ class RecordUI(QWidget):
         signal_box = QHBoxLayout()
         signal_box.addWidget(self.signal_lb)
         signal_box.addWidget(self.signal)
-        self.signal.addItems(signal_types)
+        self.signal.addItems(get_all_types())
         return signal_box
 
     def init_save_file(self):
