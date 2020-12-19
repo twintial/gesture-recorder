@@ -9,6 +9,7 @@ import os
 import re
 import recordtool
 
+
 # class RecordThread(QThread):  # 步骤1.创建一个线程实例
 #     def __init__(self):
 #         super(RecordThread, self).__init__()
@@ -69,6 +70,8 @@ class RecordUI(QWidget):
         self.input_device_lb = QLabel('Device', self)
         self.output_device_lb = QLabel('Device', self)
         self.signal_lb = QLabel('Signal', self)
+
+        self.customized_signal_file = MyLineEdit(self)
 
         self.save_dir = MyLineEdit(self)
         self.dir1 = QLineEdit(self)
@@ -162,35 +165,54 @@ class RecordUI(QWidget):
     def init_signal(self):
         signal_box = QHBoxLayout()
         signal_box.addWidget(self.signal_lb)
+        signal_box.setStretchFactor(self.signal_lb, 1)
+
         signal_box.addWidget(self.signal)
+        self.signal.activated[str].connect(self.on_customized_selected)
+        signal_box.setStretchFactor(self.signal, 1)
+
+        signal_box.addWidget(self.customized_signal_file)
+        self.customized_signal_file.setFocusPolicy(Qt.NoFocus)
+        self.customized_signal_file.setDisabled(True)
+        self.customized_signal_file.clicked.connect(self.show_wav_file_dialogue)
+        signal_box.setStretchFactor(self.customized_signal_file, 2)
+
         self.signal.addItems(get_all_types())
         return signal_box
+    def on_customized_selected(self, text):
+        if text == 'customized':
+            self.customized_signal_file.setDisabled(False)
+        else:
+            self.customized_signal_file.setDisabled(True)
+    def show_wav_file_dialogue(self):
+        file_name, file_type = QFileDialog.getOpenFileName(self, directory=os.getcwd(), filter='WAV Files (*.wav)')
+        self.customized_signal_file.setText(file_name)
 
     def init_save_file(self):
-        signal_box = QHBoxLayout()
-        signal_box.addWidget(self.save_dir)
+        file_box = QHBoxLayout()
+        file_box.addWidget(self.save_dir)
         self.save_dir.setFocusPolicy(Qt.NoFocus)
         self.save_dir.setText(os.getcwd())
         self.save_dir.clicked.connect(self.show_dir_dialogue)
-        signal_box.setStretchFactor(self.save_dir, 4)
+        file_box.setStretchFactor(self.save_dir, 4)
 
-        signal_box.addWidget(QLabel('/'))
-        signal_box.addWidget(self.dir1)
+        file_box.addWidget(QLabel('/'))
+        file_box.addWidget(self.dir1)
         self.dir1.setText('0')
-        signal_box.setStretchFactor(self.dir1, 1)
+        file_box.setStretchFactor(self.dir1, 1)
 
-        signal_box.addWidget(QLabel('/'))
-        signal_box.addWidget(self.dir2)
+        file_box.addWidget(QLabel('/'))
+        file_box.addWidget(self.dir2)
         self.dir2.setText('0')
-        signal_box.setStretchFactor(self.dir2, 1)
+        file_box.setStretchFactor(self.dir2, 1)
 
-        signal_box.addWidget(QLabel('/'))
-        signal_box.addWidget(self.filename)
+        file_box.addWidget(QLabel('/'))
+        file_box.addWidget(self.filename)
         self.filename.setText('0')
-        signal_box.setStretchFactor(self.filename, 1)
-        signal_box.addWidget(QLabel('.wav'))
+        file_box.setStretchFactor(self.filename, 1)
+        file_box.addWidget(QLabel('.wav'))
 
-        return signal_box
+        return file_box
 
     def show_dir_dialogue(self):
         dir_name = QFileDialog.getExistingDirectory(self, directory=os.getcwd())
@@ -233,7 +255,7 @@ class RecordUI(QWidget):
                 self.record_thread.stop()
                 self.setWindowTitle("停止录制")
             except:
-                self.setWindowTitle("Unexpected error:"+sys.exc_info()[0])
+                self.setWindowTitle("Unexpected error:" + sys.exc_info()[0])
             finally:
                 self._running = False
             try:
