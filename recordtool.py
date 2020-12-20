@@ -6,6 +6,8 @@ from PyQt5.QtWidgets import QLCDNumber
 
 class Record:
     def __init__(self, time: QLCDNumber):
+        self.wav_file = None
+
         self.signal = None
         self.cursor = 0
 
@@ -46,17 +48,33 @@ class Record:
             self.cursor = 0
         return out_data, pyaudio.paContinue
 
+    def wavfile_output_callback(self, in_data, frame_count, time_info, status_flags):
+        out_data = self.wav_file.readframes(frame_count)
+        return out_data, pyaudio.paContinue
+
     def play_signal(self, signal):
+        # signal可能是一个wav文件名称或者是一串信号
         self._playing = True
         self.signal = signal
-        # p = pyaudio.PyAudio()
-        self.play_stream = self.p.open(format=pyaudio.paFloat32,
-                                       channels=1,
-                                       rate=self.fs,
-                                       output=True,
-                                       output_device_index=self.output_device_index,
-                                       frames_per_buffer=self.chunk,
-                                       stream_callback=self.output_callback)
+        if type(signal) == str:
+            self.wav_file = wave.open(signal, "rb")
+            self.play_stream = self.p.open(format=self.p.get_format_from_width(self.wav_file.getsampwidth()),
+                                           channels=self.wav_file.getnchannels(),
+                                           rate=self.wav_file.getframerate(),
+                                           output=True,
+                                           output_device_index=self.output_device_index,
+                                           frames_per_buffer=self.chunk,
+                                           stream_callback=self.wavfile_output_callback
+                                           )
+        else:
+            # p = pyaudio.PyAudio()
+            self.play_stream = self.p.open(format=pyaudio.paFloat32,
+                                           channels=1,
+                                           rate=self.fs,
+                                           output=True,
+                                           output_device_index=self.output_device_index,
+                                           frames_per_buffer=self.chunk,
+                                           stream_callback=self.output_callback)
         self.play_stream.start_stream()
 
     def record(self):
@@ -78,6 +96,8 @@ class Record:
         self.record_stream.close()
         self.play_stream.stop_stream()
         self.play_stream.close()
+        if type(self.signal) == str:
+            self.wav_file.close()
         # self.p.terminate()
 
         self.save()

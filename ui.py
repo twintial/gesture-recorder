@@ -140,6 +140,10 @@ class RecordUI(QWidget):
         input_box.addWidget(self.input_driver)
         input_box.addWidget(self.input_device_lb)
         input_box.addWidget(self.input_device)
+        input_box.setStretch(0, 1)
+        input_box.setStretch(1, 1)
+        input_box.setStretch(2, 1)
+        input_box.setStretch(3, 6)
         self.input_driver.addItems([driver['name'] for driver in self.drivers])
         self.input_driver.activated[str].connect(self.on_input_drive_selected)
 
@@ -148,6 +152,10 @@ class RecordUI(QWidget):
         output_box.addWidget(self.output_driver)
         output_box.addWidget(self.output_device_lb)
         output_box.addWidget(self.output_device)
+        output_box.setStretch(0, 1)
+        output_box.setStretch(1, 1)
+        output_box.setStretch(2, 1)
+        output_box.setStretch(3, 6)
         self.output_driver.addItems([driver['name'] for driver in self.drivers])
         self.output_driver.activated[str].connect(self.on_output_drive_selected)
         return input_box, output_box
@@ -172,10 +180,11 @@ class RecordUI(QWidget):
         signal_box.setStretchFactor(self.signal, 1)
 
         signal_box.addWidget(self.customized_signal_file)
+        self.customized_signal_file.setPlaceholderText("选择wav音频文件...")
         self.customized_signal_file.setFocusPolicy(Qt.NoFocus)
         self.customized_signal_file.setDisabled(True)
         self.customized_signal_file.clicked.connect(self.show_wav_file_dialogue)
-        signal_box.setStretchFactor(self.customized_signal_file, 2)
+        signal_box.setStretchFactor(self.customized_signal_file, 4)
 
         self.signal.addItems(get_all_types())
         return signal_box
@@ -235,7 +244,12 @@ class RecordUI(QWidget):
             if input_id == -1 or output_id == -1:
                 self.setWindowTitle("请选择输入/输出设备")
                 return
-            signal_pattern = get_signal_by_type(self.signal.currentText())
+            # signal_pattern可能是一个wav文件名称或者是一串信号
+            signal_pattern = get_signal_by_type(self.signal.currentText(),
+                                                customized_signal_file=self.customized_signal_file.text())
+            if type(signal_pattern) == str and signal_pattern == '':
+                self.setWindowTitle("请选择wav音频文件")
+                return
             rec_path = self.create_save_path()
 
             in_d = p.get_device_info_by_index(input_id)
