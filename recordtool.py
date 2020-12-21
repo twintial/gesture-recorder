@@ -18,7 +18,7 @@ class Record:
         self.chunk = 2048
         self.fs = 48000
         self.channels = 1
-        self.format = pyaudio.paInt24
+        self.format = pyaudio.paInt16 # int24在数据处理上不方便
         self._recording = False
         self._playing = False
         self.save_path = None
