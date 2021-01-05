@@ -29,3 +29,27 @@ def FMCW_wave(fs, t, T, f0, f1):
     for i in range(c-1):
         y = np.hstack((y, sweep))
     return y
+
+
+def FMCW_wave_d_with_sep(fs, times, T, f0, f1, tw: float = 0):
+    # 还有点问题不能使用
+    ts = np.arange(0, T, 1.0 / fs)
+    # -T<tw<T
+    if tw >= T or tw <= -T:
+        tw = tw % T
+    # ts = ts + tw
+    B = f1 - f0
+    k = B / T
+    sweep = np.exp(1j * 2 * np.pi * (f0 * ts + (1 / 2) * k * np.power(ts, 2)))
+    sweep = np.hstack((sweep, np.zeros_like(sweep)))
+    c = int((times[-1]+1/fs) / (T))  # 这里取整
+    rest = len(times) - c * len(ts)
+    y = []
+    for i in range(c):
+        y = np.hstack((y, sweep.real)) # 增加了间隔
+    y = np.hstack((y, sweep.real[:rest]))
+    # 平移
+    if tw != 0:
+        l = int(tw * fs)
+        y = np.hstack((y[l:], sweep.real[rest:rest + l]))
+    return y
