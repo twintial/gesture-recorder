@@ -5,7 +5,7 @@ import numpy as np
 signal_types = ['cos 18kHz', 'cos 20kHz',
                 'cos 2kHz', 'fmcw 20ms 18e3-22e3kHz',
                 'fmcw 40ms 10e3-20e3kHz', 'fmcw 20ms 18e3-22e3kHz sep',
-                'sinusoid', 'sinusoid2', 'customized']
+                'sinusoid', 'sinusoid2', 'none', 'customized']
 
 
 def get_all_types():
@@ -45,5 +45,7 @@ def get_signal_by_type(type, customized_signal_file=None):
         for i in range(1, 8):
             y = y + A[i] * cos_wave(1, 17000 + i * 350, 48e3, t)
         return alpha * y
+    elif type == signal_types[8]:
+        return np.array([0] * 48000 * 60)
     elif type == 'customized':
         return customized_signal_file

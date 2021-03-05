@@ -1,7 +1,8 @@
 import wave
-
+import numpy as np
 import pyaudio
 from PyQt5.QtWidgets import QLCDNumber
+import matplotlib.pyplot as plt
 
 
 class Record:
@@ -36,6 +37,9 @@ class Record:
         self.save_path = save_path
 
     def input_callback(self, in_data, frame_count, time_info, status_flags):
+        # data = np.frombuffer(in_data, dtype=np.int16)
+        # x = data.reshape((2, -1))
+        # 多声道是否存在问题,不存在
         self.frames.append(in_data)
         self.t = self.t + frame_count / self.fs
         self.time.display(self.t)

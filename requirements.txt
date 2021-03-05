@@ -1,0 +1,5 @@
+scipy
+sounddevice
+PyQt5==5.15.2
+pyaudio
+numpy==1.18.5
