@@ -74,8 +74,8 @@ class RecordUI(QWidget):
         self.customized_signal_file = MyLineEdit(self)
 
         self.save_dir = MyLineEdit(self)
-        self.dir1 = QLineEdit(self)
-        self.dir2 = QLineEdit(self)
+        # self.dir1 = QLineEdit(self)
+        # self.dir2 = QLineEdit(self)
         self.filename = QLineEdit(self)
 
         self.input_driver = QComboBox()
@@ -188,11 +188,13 @@ class RecordUI(QWidget):
 
         self.signal.addItems(get_all_types())
         return signal_box
+
     def on_customized_selected(self, text):
         if text == 'customized':
             self.customized_signal_file.setDisabled(False)
         else:
             self.customized_signal_file.setDisabled(True)
+
     def show_wav_file_dialogue(self):
         file_name, file_type = QFileDialog.getOpenFileName(self, directory=os.getcwd(), filter='WAV Files (*.wav)')
         self.customized_signal_file.setText(file_name)
@@ -205,15 +207,15 @@ class RecordUI(QWidget):
         self.save_dir.clicked.connect(self.show_dir_dialogue)
         file_box.setStretchFactor(self.save_dir, 4)
 
-        file_box.addWidget(QLabel('/'))
-        file_box.addWidget(self.dir1)
-        self.dir1.setText('0')
-        file_box.setStretchFactor(self.dir1, 1)
-
-        file_box.addWidget(QLabel('/'))
-        file_box.addWidget(self.dir2)
-        self.dir2.setText('0')
-        file_box.setStretchFactor(self.dir2, 1)
+        # file_box.addWidget(QLabel('/'))
+        # file_box.addWidget(self.dir1)
+        # self.dir1.setText('0')
+        # file_box.setStretchFactor(self.dir1, 1)
+        #
+        # file_box.addWidget(QLabel('/'))
+        # file_box.addWidget(self.dir2)
+        # self.dir2.setText('0')
+        # file_box.setStretchFactor(self.dir2, 1)
 
         file_box.addWidget(QLabel('/'))
         file_box.addWidget(self.filename)
@@ -282,14 +284,14 @@ class RecordUI(QWidget):
             self.setWindowTitle("还没开始录制")
 
     def create_save_path(self):
-        path1 = os.path.join(self.save_dir.text(), self.dir1.text())
-        if not os.path.exists(path1):
-            os.mkdir(path1)
-        path2 = os.path.join(path1, self.dir2.text())
-        if not os.path.exists(path2):
-            os.mkdir(path2)
+        # path1 = os.path.join(self.save_dir.text(), self.dir1.text())
+        # if not os.path.exists(path1):
+        #     os.mkdir(path1)
+        # path2 = os.path.join(path1, self.dir2.text())
+        # if not os.path.exists(path2):
+        #     os.mkdir(path2)
 
-        return os.path.join(path2, f'{self.filename.text()}.wav')
+        return os.path.join(self.save_dir.text(), f'{self.filename.text()}.wav')
 
     # 按键录制 esc
     def keyPressEvent(self, e):

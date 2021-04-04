@@ -1,4 +1,4 @@
-scipy
+scipy==1.6.1
 sounddevice
 PyQt5==5.15.2
 pyaudio
