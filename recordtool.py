@@ -1,8 +1,7 @@
 import wave
-import numpy as np
+
 import pyaudio
 from PyQt5.QtWidgets import QLCDNumber
-import matplotlib.pyplot as plt
 
 
 class Record:

@@ -1,6 +1,4 @@
 import pyaudio
-import wave
-from tqdm import tqdm
 
 from sinsound import cos_wave
 

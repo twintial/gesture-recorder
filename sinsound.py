@@ -1,5 +1,5 @@
 import numpy as np
-import scipy.signal as signal
+# import scipy.signal as signal
 
 
 def cos_wave(A, f, fs, t, phi=0):
@@ -22,12 +22,13 @@ def cos_wave(A, f, fs, t, phi=0):
 
 
 def FMCW_wave(fs, t, T, f0, f1):
-    ts = np.arange(0, T, 1.0 / fs)
-    sweep = signal.chirp(ts, f0, T, f1, method='linear').astype(np.float32)
-    c = int(t/T)  # 这里取整
-    y = sweep
-    for i in range(c-1):
-        y = np.hstack((y, sweep))
+    # ts = np.arange(0, T, 1.0 / fs)
+    # sweep = signal.chirp(ts, f0, T, f1, method='linear').astype(np.float32)
+    # c = int(t/T)  # 这里取整
+    # y = sweep
+    # for i in range(c-1):
+    #     y = np.hstack((y, sweep))
+    y = 0
     return y
 
 
