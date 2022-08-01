@@ -1,3 +1,4 @@
+import sys
 import wave
 import numpy as np
 import pyaudio
@@ -16,7 +17,7 @@ class Record:
         self.t = 0
 
         self.frames = []
-        self.chunk = 2048
+        self.chunk = 7200
         self.fs = 48000
         self.channels = 1
         self.format = pyaudio.paInt16  # int24在数据处理上不方便,改为int16
@@ -48,12 +49,18 @@ class Record:
     def output_callback(self, in_data, frame_count, time_info, status_flags):
         out_data = self.signal[self.cursor:self.cursor + frame_count]
         self.cursor = self.cursor + frame_count
+        # 存在最后一小段放不出的问题
         if self.cursor + frame_count > len(self.signal):
             self.cursor = 0
         return out_data, pyaudio.paContinue
 
     def wavfile_output_callback(self, in_data, frame_count, time_info, status_flags):
+        # 如果要连续播放，chunk的大小必须能被音频样本点整除
         out_data = self.wav_file.readframes(frame_count)
+        if len(out_data) == 0:
+            # print("l:", frame_count * self.wav_file.getnchannels() * self.wav_file.getsampwidth())
+            self.wav_file.rewind()
+            out_data = self.wav_file.readframes(frame_count)
         return out_data, pyaudio.paContinue
 
     def play_signal(self, signal):

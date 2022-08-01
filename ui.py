@@ -188,11 +188,13 @@ class RecordUI(QWidget):
 
         self.signal.addItems(get_all_types())
         return signal_box
+
     def on_customized_selected(self, text):
         if text == 'customized':
             self.customized_signal_file.setDisabled(False)
         else:
             self.customized_signal_file.setDisabled(True)
+
     def show_wav_file_dialogue(self):
         file_name, file_type = QFileDialog.getOpenFileName(self, directory=os.getcwd(), filter='WAV Files (*.wav)')
         self.customized_signal_file.setText(file_name)
