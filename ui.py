@@ -10,37 +10,6 @@ import re
 import recordtool
 
 
-# class RecordThread(QThread):  # 步骤1.创建一个线程实例
-#     def __init__(self):
-#         super(RecordThread, self).__init__()
-#         self.rdy = False
-#         self.input_id = -1
-#         self.output_id = -1
-#         self.signal_pattern = 0
-#         self.rec_path = -1
-#         self.fs = 48e3
-#         self.channels = 1
-#
-#     def set_params(self, input_device_id, output_device_id, signal, rec_file_path, fs, rec_file_channels):
-#         self.input_id = input_device_id
-#         self.output_id = output_device_id
-#         self.signal_pattern = signal
-#         self.rec_path = rec_file_path
-#         self.fs = fs
-#         self.channels = rec_file_channels
-#         self.rdy = True
-#
-#     def run(self):
-#         if self.rdy:
-#             try:
-#                 play_and_record(self.input_id, self.output_id, self.signal_pattern, self.rec_path, self.fs,
-#                                 self.channels)
-#             except:
-#                 print("Unexpected error:", sys.exc_info()[0])
-#         else:
-#             print("未设置参数")
-
-
 class MyLineEdit(QLineEdit):
     clicked = pyqtSignal()
 

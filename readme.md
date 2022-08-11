@@ -1,4 +1,4 @@
-# Build
+# Package to .exe
 pyinstaller -Fw ui.py -p deviceinfoV2.py -p signalgenerator.py -p sinsound.py -p recordtool.py
 # notice
 1. 发射的sinusoid采样率均为48kHz
